@@ -1,0 +1,26 @@
+On Swarm Manager and Worker node:-
+sudo yum update -y
+
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker cloud_user
+
+docker --version
+
+ON MANAGER NODE ONLY
+docker swarm init --advertise-addr [Private_IP_Address]
+
+Install Terraform:-
+Install Terraform 0.11.13 on the Swarm manager:
+sudo curl -O https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+sudo yum install -y unzip
+sudo unzip terraform_0.11.13_linux_amd64.zip -d /usr/local/bin/
+
+Test the Terraform installation:
+terraform version
+
+ON WORKER NODE
+docker swarm join --token [TOKEN] [Private_IP_Address_Of_Manager]:2377

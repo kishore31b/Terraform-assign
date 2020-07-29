@@ -1,0 +1,107 @@
+Why infrastructure as a code:-
+1. Lowers cost 
+	And it does this by reducing the amount of time required to provisioning and manage infrastructure. And what we mean by this is that one person or, you know, 
+maybe a small team can manage a very, very large infrastructure with a lot of confidence. When you use infrastructure as a code, 
+when you really codeify the configuration that you're using and you have some automated provisioning set up that you don't have to manually going copy things around.
+2.Improvement of Speed
+	And this happens because when you codeify your infrastructure and your provisioning you can do things much faster than you can as a human. 
+One of the older ways of going through in provisioning machines and doing your configuration is maybe you would write a bunch of bash scripts that you would kind of cobble together, 
+but you would have to manually do them one after another. Or you would copy and paste lines from a file that you knew this is the exact thing that you needed to run, 
+but doing it that way is still slower than if you had an automated process where you were able to write your configuration and then have the machine go and run it on a group of nodes simultaneously. 
+So that's much, much faster than you manually doing it.
+3. Improves Stability and Security
+	And we get stability because we can see the changes that are being made. And we know that we're specifying maybe specific versions of packages that were installing and we can have these be peer reviewed and then additionally, 
+we get the security benefits of that, too. So you have if somebody can watch the changes being made to your configuration through your configuration management repositories. So you write your code. Somebody reviews that code. 
+They can see maybe if you have malicious people internally who are trying to add things or back doors and tear infrastructure, those can be found in pure review. And even more than that, 
+you can automate some security checks on your infrastructure, using some of the same tools that we're gonna be talking about. 
+
+So with these goals and benefits in mind, we want to lower costs, improve speed and improve stability and security. 
+
+
+===========================Terraform Installation==========================================================
+
+Now, we will create two Docker servers using Cloud Playground. These servers will be used to set up a Docker Swarm cluster.
+
+We'll create two Cloud Servers from Cloud Playground, using the information below:
+
+Swarm Manager:
+Distribution: CentOS 7
+Size: Medium
+Tag: Docker Swarm Manager
+
+Swarm Worker:
+Distribution: CentOS 7
+Size: Medium
+Tag: Docker Swarm Worker
+
+
+Installing Docker on the Swarm Manager and Worker
+These actions will be executed on both the Swarm manager and worker nodes.
+
+Update the operating system
+sudo yum update -y
+
+Prerequisites:-
+
+Uninstall old versions:
+sudo yum remove -y docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+Install Docker CE:-
+
+Install Utils:
+sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+
+Add the Docker repository:
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+Install Docker CE:
+sudo yum -y install docker-ce
+
+Start Docker and enable it:
+sudo systemctl start docker && sudo systemctl enable docker
+
+Add cloud_user to the docker group:
+sudo usermod -aG docker cloud_user
+
+Test the Docker installation:
+docker --version
+
+Configuring Swarm Manager node
+On the manager node, initialize the manager:
+
+docker swarm init \
+--advertise-addr [PRIVATE_IP]
+Configure the Swarm Worker node
+On the worker node, add the worker to the cluster:
+
+docker swarm join --token [TOKEN] \
+
+[PRIVATE_IP]:2377
+Verify the Swarm cluster
+
+List Swarm nodes:
+docker node ls
+
+
+Install Terraform:-
+
+Install Terraform 0.11.13 on the Swarm manager:
+sudo curl -O https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+sudo yum install -y unzip
+sudo unzip terraform_0.11.13_linux_amd64.zip -d /usr/local/bin/
+
+Test the Terraform installation:
+terraform version
+
+Download Terraform (https://www.terraform.io/downloads.html)
