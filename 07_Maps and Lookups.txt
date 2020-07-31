@@ -93,3 +93,6 @@ lookup(var.ext_port, var.env)
 Exit the console:
 
 unset TF_VAR_env
+
+
+https://www.terraform.io/docs/backends/types/local.html  #to store the terrafoem.tfstate file in different location  rather then current working directory 

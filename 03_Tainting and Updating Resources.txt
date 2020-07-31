@@ -19,7 +19,8 @@ terraform apply
 Taint the Ghost blog resource:
 
 terraform taint docker_container.container_id
-See what will be changed:
+See what will be changed:---->  # docker_container.container_id is tainted, so must be replaced----> Plan: 1 to add, 0 to change, 1 to destroy.
+
 
 terraform plan
 Remove the taint on the Ghost blog resource:
